@@ -3,7 +3,7 @@ import ReusableForm from "./ReusableForm";
 import PropTypes from "prop-types";
 
 function EditTicketForm (props) {
-   const { ticket } = props;
+  const { ticket } = props;
 
   function handleEditTicketFormSubmission(event) {
     event.preventDefault();
