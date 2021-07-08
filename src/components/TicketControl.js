@@ -12,7 +12,7 @@ class TicketControl extends React.Component {
     super(props);
     console.log(props);
     this.state = {
-      formVisibleOnPage: false,
+      // formVisibleOnPage: false,
       selectedTicket: null,
       editing: false
     };
@@ -21,15 +21,20 @@ class TicketControl extends React.Component {
   handleClick = () => {
     if (this.state.selectedTicket != null) {
       this.setState({
-        formVisibleOnPage: false,
+        // formVisibleOnPage: false,
         selectedTicket: null,
         editing: false
       });
     } else {
-      this.setState(prevState => ({
-        formVisibleOnPage: !prevState.formVisibleOnPage,
-      }));
-    }
+      // this.setState(prevState => ({
+      //   formVisibleOnPage: !prevState.formVisibleOnPage,
+      // }));
+        const { dispatch } = this.props;
+        const action = {
+          type: 'TOGGLE_FORM'
+        }
+        dispatch(action);
+      }
   }
 
   handleEditClick = () => {
@@ -38,8 +43,7 @@ class TicketControl extends React.Component {
   }
 
   handleAddingNewTicketToList = (newTicket) => {
-
-    const { dispatch } = this.props; //triggers new state change
+    const { dispatch } = this.props;
     const { id, names, location, issue } = newTicket;
     const action = {
       type: 'ADD_TICKET',
@@ -49,7 +53,10 @@ class TicketControl extends React.Component {
       issue: issue,
     }
     dispatch(action);
-    this.setState({ formVisibleOnPage: false });
+    const action2 = {
+      type: 'TOGGLE_FORM'
+    }
+    dispatch(action2);
   }
 
   handleEditingTicketInList = (ticketToEdit) => {
@@ -105,7 +112,7 @@ class TicketControl extends React.Component {
       buttonText = "Return to Ticket List";
       // While our TicketDetail component only takes placeholder data, we will eventually be passing the value of selectedTicket as a prop.
     }
-    else if (this.state.formVisibleOnPage) {
+    else if (this.props.formVisibleOnPage) {
       // This conditional needs to be updated to "else if."
       currentlyVisibleState = <NewTicketForm onNewTicketCreation={this.handleAddingNewTicketToList} />;
       buttonText = "Return to Ticket List";
@@ -124,9 +131,16 @@ class TicketControl extends React.Component {
 }
 const mapStateToProps = state => {
   return {
-    masterTicketList: state
+    masterTicketList: state.masterTicketList,
+    formVisibleOnPage: state.formVisibleOnPage
   }
 }
+
+TicketControl.propTypes = {
+  masterTicketList: PropTypes.object,
+  formVisibleOnPage: PropTypes.bool
+};
+
 TicketControl = connect(mapStateToProps)(TicketControl);
 
 export default TicketControl;
